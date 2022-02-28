@@ -54,3 +54,12 @@ Essa tag pode variar conforme o propósito do commit.
 | REFACTOR | Refatoramento de código, ou seja, não corrige um bug nem adiciona uma funcionalidade |
 
 Logo após terminar um merge request deve ser feito e será validado por todos do grupo.
+
+## 4. Dependências
+---
+
+* [haskell platform](https://www.cyberithub.com/how-to-install-haskell-platform-on-ubuntu-20-04-lts/)
+* [mariadb](https://www.mariadbtutorial.com/getting-started/install-mariadb/)
+* [mysql-haskell-0.8.4.3](https://hackage.haskell.org/package/mysql-haskell)
+
+
