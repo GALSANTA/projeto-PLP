@@ -63,3 +63,13 @@ Logo após terminar um merge request deve ser feito e será validado por todos d
 * [mysql-haskell-0.8.4.3](https://hackage.haskell.org/package/mysql-haskell)
 
 
+## 5. Rodando o código em haskell
+---
+
+Primeiro tenha o `cabal` instalado no seu Linux, se você baixou o haskell platform já deve ter ele. Dentro da pasta haskell rode o seguinte comando
+
+```
+cabal run
+```
+
+
