@@ -1,4 +1,4 @@
-module Util.Util where
+module Entry where
 
 lerEntrada :: IO String
 lerEntrada = do

@@ -1,10 +1,10 @@
-import Util.Util as Util
-import Controllers.LoginController as LoginController
+import Entry
+import LoginController
 
 main :: IO ()
 main = do
  print("Gerenciador de cronograma academico")
- opcao <- Util.lerEntrada
+ opcao <- Entry.lerEntrada
  escolheOpcao opcao
 
 escolheOpcao :: String -> IO()
