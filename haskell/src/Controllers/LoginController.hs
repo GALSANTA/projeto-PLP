@@ -6,27 +6,21 @@ import Database.MySQL.Base
 import qualified System.IO.Streams as Streams
 import Data.Text as TS
 import Util.Util as Util
+import Database.ConnectionDB as ConnectionDB
 
 signIn :: IO() 
 signIn = do 
     print "Digite o usuario"
-    a <- Entry.lerEntrada
+    user <- Entry.lerEntrada
     print "Digite a senha"
-    b <- Entry.lerEntrada
-    let user = TS.pack(a)
-    let password = TS.pack(b)
-
-    conn <- connect
-     defaultConnectInfo {ciHost="10.11.19.23", ciUser = "remote", ciPassword = "123", ciDatabase = "projetoPLP"}
-    s <- prepareStmt conn "SELECT * FROM tb_usuario WHERE usuario=? AND senha=?"
-    
-    (defs, is) <- queryStmt conn s [MySQLText user, MySQLText password]
+    password <- Entry.lerEntrada
+    (defs, is) <- getUser user password
     matriz <- Streams.toList is
+
     if matriz /= []
         then do
-            let list = Util.matrizToList matriz
-            let result = Util.convert(Util.getName list)
-            let r = "BEM VINDO "++result
+            let nome = Util.convert(Util.getName (Util.matrizToList matriz))
+            let r = "BEM VINDO "++nome
             putStrLn r
     else
         putStrLn "Não Logou"
@@ -34,27 +28,36 @@ signIn = do
 signUp :: IO()
 signUp = do 
     print "Nome: "
-    n <- Entry.lerEntrada
+    nome <- Entry.lerEntrada
     print "Profissao: "
-    p <- Entry.lerEntrada 
+    profissao <- Entry.lerEntrada 
     print "CPF: "
-    c <- Entry.lerEntrada
+    cpf <- Entry.lerEntrada
     print "Matricula: "
-    m <- Entry.lerEntrada
+    matricula <- Entry.lerEntrada
     print "Usuario: "
-    u <- Entry.lerEntrada
+    usuario <- Entry.lerEntrada
     print "Senha: "
-    s <- Entry.lerEntrada
-    let nome = TS.pack(n)
-    let cpf = TS.pack(c)
-    let usuario = TS.pack(u)
-    let senha = TS.pack(s)
-    let matricula = TS.pack(m)
-    let profissao = TS.pack(p)
-
-    conn <- connect
-     defaultConnectInfo {ciHost="10.11.19.23", ciUser = "remote", ciPassword = "123", ciDatabase = "projetoPLP"}
-    execute conn "INSERT INTO tb_usuario VALUES (NULL, ?, ?, ?, ?, ?, ?)" [MySQLText nome, MySQLText cpf, MySQLText matricula, MySQLText profissao, MySQLText usuario, MySQLText senha]
+    senha <- Entry.lerEntrada
+    
+    insertUser nome cpf usuario senha matricula profissao
     print "Usuario Cadastrado com sucesso!"
 
+insertUser :: String -> String -> String -> String -> String -> String -> IO OK
+insertUser nome cpf usuario senha matricula profissao = do
+    let n = TS.pack(nome)
+    let c = TS.pack(cpf)
+    let u = TS.pack(usuario)
+    let s = TS.pack(senha)
+    let m = TS.pack(matricula)
+    let p = TS.pack(profissao)
+    conn <- ConnectionDB.connectDB
+    execute conn "INSERT INTO tb_usuario VALUES (NULL, ?, ?, ?, ?, ?, ?)" [MySQLText n, MySQLText c, MySQLText m, MySQLText p, MySQLText u, MySQLText s]
 
+getUser :: String -> String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+getUser user password = do
+    let a = TS.pack(user)
+    let b = TS.pack(password) 
+    conn <- ConnectionDB.connectDB
+    query <- prepareStmt conn "SELECT * FROM tb_usuario WHERE usuario=? AND senha=?"
+    queryStmt conn query [MySQLText a, MySQLText b]

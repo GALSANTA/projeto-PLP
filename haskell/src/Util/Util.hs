@@ -16,3 +16,9 @@ getName (id:name:tail) = name
 
 getCPF :: [MySQLValue] -> MySQLValue
 getCPF (id:name:cpf:tail) = cpf
+
+getMatricula :: [MySQLValue] -> MySQLValue
+getMatricula (id:name:cpf:matricula:tail) = matricula
+
+getProfissao :: [MySQLValue] -> MySQLValue
+getProfissao (id:name:cpf:matricula:profissao:tail) = profissao
