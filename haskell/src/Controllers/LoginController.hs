@@ -39,9 +39,11 @@ signUp = do
     usuario <- Entry.lerEntrada
     print "Senha: "
     senha <- Entry.lerEntrada
+
+    (defs, is) <- verifyData cpf matricula
+    matriz <- Streams.toList is
     
-    insertUser nome cpf usuario senha matricula profissao
-    print "Usuario Cadastrado com sucesso!"
+    validateRegistry matriz nome cpf usuario senha matricula profissao
 
 insertUser :: String -> String -> String -> String -> String -> String -> IO OK
 insertUser nome cpf usuario senha matricula profissao = do
@@ -61,3 +63,21 @@ getUser user password = do
     conn <- ConnectionDB.connectDB
     query <- prepareStmt conn "SELECT * FROM tb_usuario WHERE usuario=? AND senha=?"
     queryStmt conn query [MySQLText a, MySQLText b]
+
+
+verifyData :: String -> String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+verifyData cpf matricula = do
+    let a = TS.pack(cpf)
+    let b = TS.pack(matricula) 
+    conn <- ConnectionDB.connectDB
+    query <- prepareStmt conn "SELECT * FROM tb_usuario WHERE cpf=? OR matricula=?"
+    queryStmt conn query [MySQLText a, MySQLText b]
+
+validateRegistry:: [[MySQLValue]] -> String -> String -> String -> String -> String -> String -> IO()
+validateRegistry matriz nome cpf usuario senha matricula profissao =if matriz == []
+        then do
+            insertUser nome cpf usuario senha matricula profissao
+            print "Usuario Cadastrado com sucesso!"
+    else
+        print "Usuario Ja cadastrado!"
+            

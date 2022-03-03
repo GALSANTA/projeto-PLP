@@ -4,6 +4,9 @@ import Data.Binary.Put
 import Data.Text as TS
 import Data.Text.Lazy.Encoding as TLE
 import Data.Text.Lazy as TL
+import Database.ConnectionDB as ConnectionDB
+import qualified System.IO.Streams as Streams
+import Database.MySQL.Base
 
 convert :: MySQLValue -> String
 convert value = TL.unpack(TLE.decodeUtf8(runPut(putTextField(value))))
