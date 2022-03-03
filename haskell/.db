@@ -17,7 +17,7 @@ CREATE TABLE tb_disciplina (
 );
 
 CREATE TABLE tb_aluno_disciplina (
-   aluno_id INT NOT NULL PRIMARY KEY,
+   aluno_id INT NOT NULL,
    disciplina_id INT NOT NULL, 
    nota INT NOT NULL,
    CONSTRAINT `fk_aluno` FOREIGN KEY (aluno_id) REFERENCES tb_usuario (id),
@@ -25,9 +25,9 @@ CREATE TABLE tb_aluno_disciplina (
 );
 
 CREATE TABLE tb_dependencia (
-   id INT NOT NULL PRIMARY KEY,
-   disciplina_id INT NOT NULL, 
-   CONSTRAINT `fk_dependencia` FOREIGN KEY (disciplina_id) REFERENCES tb_disciplina (id)
+   id INT NOT NULL,
+   disciplina_id INT NOT NULL,
+   CONSTRAINT `fk_dependencia_segunda` FOREIGN KEY (disciplina_id) REFERENCES tb_disciplina (id)
 );
 
 
