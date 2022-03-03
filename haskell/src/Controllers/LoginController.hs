@@ -2,17 +2,20 @@
 
 module Controllers.LoginController where
 import Util.Entry as Entry
-import Database.MySQL.Base
+import Util.Menu as Menu
 import qualified System.IO.Streams as Streams
 import Data.Text as TS
 import Util.Util as Util
 import Database.ConnectionDB as ConnectionDB
+import Database.MySQL.Base
+import System.Console.ANSI
 
-signIn :: IO() 
-signIn = do 
-    print "Digite o usuario"
+signIn :: (String -> IO ()) -> IO() 
+signIn originalMenu = do 
+    clearScreen
+    putStrLn("Digite o usuário")
     user <- Entry.lerEntrada
-    print "Digite a senha"
+    putStrLn("Digite a senha")
     password <- Entry.lerEntrada
     (defs, is) <- getUser user password
     matriz <- Streams.toList is
@@ -20,30 +23,31 @@ signIn = do
     if matriz /= []
         then do
             let nome = Util.convert(Util.getName (Util.matrizToList matriz))
-            let r = "BEM VINDO "++nome
-            putStrLn r
+            clearScreen
+            menu originalMenu matriz
     else
-        putStrLn "Não Logou"
+        originalMenu("Usuário não encontrado!")
 
-signUp :: IO()
-signUp = do 
-    print "Nome: "
+signUp :: (String -> IO ()) -> IO()
+signUp originalMenu = do
+    clearScreen 
+    putStrLn("Nome: ")
     nome <- Entry.lerEntrada
-    print "Profissao: "
-    profissao <- Entry.lerEntrada 
-    print "CPF: "
+    putStrLn("Profissao: ")
+    profissao <- Entry.lerEntrada
+    putStrLn("CPF: ")
     cpf <- Entry.lerEntrada
-    print "Matricula: "
+    putStrLn("Matricula: ")
     matricula <- Entry.lerEntrada
-    print "Usuario: "
+    putStrLn("Usuario: ")
     usuario <- Entry.lerEntrada
-    print "Senha: "
+    putStrLn("Senha: ")
     senha <- Entry.lerEntrada
 
     (defs, is) <- verifyData cpf matricula
     matriz <- Streams.toList is
     
-    validateRegistry matriz nome cpf usuario senha matricula profissao
+    validateRegistry originalMenu matriz nome cpf usuario senha matricula profissao
 
 insertUser :: String -> String -> String -> String -> String -> String -> IO OK
 insertUser nome cpf usuario senha matricula profissao = do
@@ -73,11 +77,11 @@ verifyData cpf matricula = do
     query <- prepareStmt conn "SELECT * FROM tb_usuario WHERE cpf=? OR matricula=?"
     queryStmt conn query [MySQLText a, MySQLText b]
 
-validateRegistry:: [[MySQLValue]] -> String -> String -> String -> String -> String -> String -> IO()
-validateRegistry matriz nome cpf usuario senha matricula profissao =if matriz == []
+validateRegistry:: (String -> IO ()) -> [[MySQLValue]] -> String -> String -> String -> String -> String -> String -> IO()
+validateRegistry originalMenu matriz nome cpf usuario senha matricula profissao =if matriz == []
         then do
             insertUser nome cpf usuario senha matricula profissao
-            print "Usuario Cadastrado com sucesso!"
+            originalMenu("Usuário cadastrado com sucesso!")
     else
-        print "Usuario Ja cadastrado!"
+        originalMenu("Usuário já cadastrado!")
             
