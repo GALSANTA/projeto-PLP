@@ -1,5 +1,5 @@
-import Entry
-import LoginController
+import Util.Entry as Entry
+import Controllers.LoginController as LoginController
 
 main :: IO ()
 main = do
