@@ -25,14 +25,36 @@ signIn = do
     if matriz /= []
         then do
             let list = Util.matrizToList matriz
-            let result = Util.convert(Util.getCPF list)
+            let result = Util.convert(Util.getName list)
             let r = "BEM VINDO "++result
             putStrLn r
     else
         putStrLn "Não Logou"
 
-signUp :: IO() 
+signUp :: IO()
 signUp = do 
-    print("REGISTRAR")
+    print "Nome: "
+    n <- Entry.lerEntrada
+    print "Profissao: "
+    p <- Entry.lerEntrada 
+    print "CPF: "
+    c <- Entry.lerEntrada
+    print "Matricula: "
+    m <- Entry.lerEntrada
+    print "Usuario: "
+    u <- Entry.lerEntrada
+    print "Senha: "
+    s <- Entry.lerEntrada
+    let nome = TS.pack(n)
+    let cpf = TS.pack(c)
+    let usuario = TS.pack(u)
+    let senha = TS.pack(s)
+    let matricula = TS.pack(m)
+    let profissao = TS.pack(p)
+
+    conn <- connect
+     defaultConnectInfo {ciHost="10.11.19.23", ciUser = "remote", ciPassword = "123", ciDatabase = "projetoPLP"}
+    execute conn "INSERT INTO tb_usuario VALUES (NULL, ?, ?, ?, ?, ?, ?)" [MySQLText nome, MySQLText cpf, MySQLText matricula, MySQLText profissao, MySQLText usuario, MySQLText senha]
+    print "Usuario Cadastrado com sucesso!"
 
 
