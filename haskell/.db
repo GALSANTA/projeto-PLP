@@ -42,6 +42,7 @@ create table tb_tarefa(
      CONSTRAINT `fk_colabordor3` FOREIGN KEY (colaborador3) REFERENCES tb_usuario (id)
 
    );
+   alter table tb_tarefa add column notificacao DATETIME;
 
 ------------- USUARIOS ------------------
 
