@@ -14,6 +14,14 @@ convert value = TL.unpack(TLE.decodeUtf8(runPut(putTextField(value))))
 matrizToList :: [[MySQLValue]] -> [MySQLValue]
 matrizToList (x:xs) = x
 
+disciplinas :: [[MySQLValue]] -> String
+disciplinas [] = []
+disciplinas (x:xs) = "\nID "++convert(getIdDisciplina x)++", NOME: " ++ convert(getNameDisciplina x) ++", PROFESSOR: "++ convert(getNameProfessor x) ++ disciplinas xs
+
+--------------USUARIO------------------ 
+getId :: [MySQLValue] -> MySQLValue
+getId (id:tail) = id
+
 getName :: [MySQLValue] -> MySQLValue
 getName (id:name:tail) = name
 
@@ -25,3 +33,14 @@ getMatricula (id:name:cpf:matricula:tail) = matricula
 
 getProfissao :: [MySQLValue] -> MySQLValue
 getProfissao (id:name:cpf:matricula:profissao:tail) = profissao
+
+--------------DISCIPLINA------------------
+ 
+getIdDisciplina :: [MySQLValue] -> MySQLValue
+getIdDisciplina (id:tail) = id
+
+getNameDisciplina :: [MySQLValue] -> MySQLValue
+getNameDisciplina (id:name:tail) = name
+
+getNameProfessor:: [MySQLValue] -> MySQLValue
+getNameProfessor (id:name:nameP:tail) = nameP
