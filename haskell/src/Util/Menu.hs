@@ -5,6 +5,7 @@ import Util.Entry as Entry
 import Util.Util as Util
 import Database.MySQL.Base
 import Database.ConnectionDB as ConnectionDB
+import Controllers.ProfessorController as ProfessorController
 import qualified System.IO.Streams as Streams
 import System.Console.ANSI
 
@@ -22,14 +23,14 @@ menuProfessor originalMenu matriz = do
     clearScreen
     let nome = Util.convert(Util.getName (Util.matrizToList matriz))
     putStrLn("Olá professor: "++nome++"! O que deseja?")
-    putStrLn("[1] para inserir nota de uma aluno.")
+    putStrLn("[1] para atualizar nota de uma aluno.")
     putStrLn("[2] para deslogar")
 
     opcao <- Entry.lerEntrada
     if opcao == "1"
-        then do putStrLn("Inserindo nota do aluno")
+        then do ProfessorController.atualizaNota originalMenu
     else if opcao == "2"
-        then do originalMenu("Nota do aluno inserida com sucesso!")
+        then do originalMenu(nome++" foi deslogado!")
     else
         originalMenu("Operação Inválida")
 
