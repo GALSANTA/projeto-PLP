@@ -69,3 +69,42 @@ cadeiras periodo quantidade = do
     conn <- connectDB
     query <- prepareStmt conn "SELECT id_disciplina, nome_disciplina, nome  FROM tb_disciplina AS A INNER JOIN tb_usuario AS B ON B.id_usuario = A.professor_id WHERE (A.tipo=? OR A.tipo='O') ORDER BY id_disciplina LIMIT ?"
     queryStmt conn query [MySQLText a, MySQLText b]
+
+getCountDependencia :: String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+getCountDependencia id_disciplina = do 
+    let a = TS.pack(id_disciplina)
+    conn <- connectDB
+    query <- prepareStmt conn "SELECT COUNT(*) FROM tb_dependencia WHERE id=?"
+    queryStmt conn query [MySQLText a]
+
+getCountDependenciaAluno :: String -> String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+getCountDependenciaAluno id_disciplina aluno_id = do
+    let a = TS.pack(aluno_id)
+    let b = TS.pack(id_disciplina)
+    conn <- connectDB
+    query <- prepareStmt conn "SELECT COUNT(*) FROM tb_dependencia AS A JOIN tb_aluno_disciplina AS B ON (A.disciplina_id = B.disciplina_id AND aluno_id=?) WHERE id=?"
+    queryStmt conn query [MySQLText a, MySQLText b]
+
+showDependencia :: String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+showDependencia id_disciplina  = do
+    let a = TS.pack(id_disciplina)
+    conn <- connectDB
+    query <- prepareStmt conn "SELECT disciplina_id, nome_disciplina, nome FROM tb_dependencia AS A JOIN tb_disciplina AS B ON (A.disciplina_id = B.id_disciplina) INNER JOIN tb_usuario AS C ON (C.id_usuario = B.professor_id) WHERE id=?"
+    queryStmt conn query [MySQLText a]
+
+showDependenciaClosed :: String -> String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+showDependenciaClosed id_disciplina aluno_id  = do
+    let a = TS.pack(aluno_id)
+    let b = TS.pack(id_disciplina)
+    conn <- connectDB
+    query <- prepareStmt conn "SELECT A.disciplina_id, nome_disciplina, nome FROM tb_dependencia AS A JOIN tb_aluno_disciplina AS B ON (A.disciplina_id = B.disciplina_id AND aluno_id=?) INNER JOIN tb_disciplina AS C ON (B.disciplina_id = C.id_disciplina) INNER JOIN tb_usuario AS D ON (D.id_usuario = C.professor_id) WHERE id=?"
+    queryStmt conn query [MySQLText a, MySQLText b]
+
+
+    -- SELECT A.disciplina_id, nome_disciplina, nome FROM tb_dependencia AS A 
+    -- JOIN tb_aluno_disciplina AS B ON (A.disciplina_id = B.disciplina_id AND aluno_id=4)
+    -- INNER JOIN tb_disciplina AS C ON (B.disciplina_id = C.id_disciplina)
+    -- INNER JOIN tb_usuario AS D ON (D.id_usuario = C.professor_id)
+    -- WHERE id=11
+
+    -- SELECT disciplina_id, nome_disciplina, nome FROM tb_dependencia AS A JOIN tb_disciplina AS B ON (A.disciplina_id = B.id_disciplina) INNER JOIN tb_usuario AS C ON (C.id_usuario = B.professor_id) WHERE id=11

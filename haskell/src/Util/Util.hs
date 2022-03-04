@@ -4,7 +4,6 @@ import Data.Binary.Put
 import Data.Text as TS
 import Data.Text.Lazy.Encoding as TLE
 import Data.Text.Lazy as TL
-import Database.ConnectionDB as ConnectionDB
 import qualified System.IO.Streams as Streams
 import Database.MySQL.Base
 
@@ -13,6 +12,9 @@ convert value = TL.unpack(TLE.decodeUtf8(runPut(putTextField(value))))
 
 matrizToList :: [[MySQLValue]] -> [MySQLValue]
 matrizToList (x:xs) = x
+
+getCount :: [MySQLValue] -> MySQLValue
+getCount (count:tail) = count
 
 disciplinas :: [[MySQLValue]] -> String
 disciplinas [] = []

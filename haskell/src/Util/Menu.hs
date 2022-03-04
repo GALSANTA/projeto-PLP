@@ -77,10 +77,37 @@ menuInserir msg originalMenu matriz = do
 
             if  m == []
                 then do
-                    inserirDisciplina id_aluno id_disciplina
-                    menuInserir "Inserido com sucesso!" originalMenu matriz
-            else 
-                menuInserir "Já cursando ou terminando!" originalMenu matriz
+                    (defs, is) <- getCountDependencia id_disciplina
+                    m <- Streams.toList is
+                    let c1 = Util.convert(Util.getCount (Util.matrizToList m))
+                    (defs, is) <- getCountDependenciaAluno id_disciplina id_aluno
+                    m <- Streams.toList is
+                    let c2 = Util.convert(Util.getCount (Util.matrizToList m))
+            
+                    if c1 == c2
+                        then do
+                            inserirDisciplina id_aluno id_disciplina
+                            menuInserir "Inserido com sucesso!" originalMenu matriz
+                    else if c1 /= c2
+                        then do
+                            putStrLn("\n [ALERT] Infelizmente essa disciplina tem pedências com outras que você não cursou.")
+                            putStrLn("\n Disciplinas necessárias: ")
+                            (defs, is) <- showDependencia id_disciplina
+                            m <- Streams.toList is
+                            let result = Util.disciplinas m
+                            putStrLn(result)
+                            putStrLn("\n Disciplinas que você cursou: ")
+                            (defs, is) <- showDependenciaClosed id_disciplina id_aluno
+                            m <- Streams.toList is
+                            let result = Util.disciplinas m
+                            putStrLn(result)
+                            putStrLn("--- aperte enter ---")
+                            enter <- Entry.lerEntrada
+                            menuInserir "" originalMenu matriz
+                    else 
+                        menuInserir "" originalMenu matriz
+                else 
+                    menuInserir "Já cursando ou terminando!" originalMenu matriz
 
     else if opcao == "2"
         then do menuAluno originalMenu matriz
