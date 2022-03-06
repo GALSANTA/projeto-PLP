@@ -1,3 +1,5 @@
+create database projetoPLP;
+
 CREATE TABLE tb_usuario (
    id_usuario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
    nome VARCHAR(100) NOT NULL,
@@ -35,16 +37,16 @@ CREATE TABLE tb_dependencia (
 create table tb_tarefa(
    id int AUTO_INCREMENT primary key,
    descricao varchar(255) NOT NULL,
-   colaborador1 int,
+   colaborador1 int NOT NULL,
    colaborador2 int,
-   colaborador3 int,
-   CONSTRAINT `fk_colabordor1` FOREIGN KEY (colaborador1) REFERENCES tb_usuario (id),
-    CONSTRAINT `fk_colabordor2` FOREIGN KEY (colaborador2) REFERENCES tb_usuario (id),
-     CONSTRAINT `fk_colabordor3` FOREIGN KEY (colaborador3) REFERENCES tb_usuario (id)
-
+   colaborador3 int
    );
-   alter table tb_tarefa add column notificacao DATETIME;
 
+alter table tb_tarefa add column notificacao TIMESTAMP;
+alter table tb_tarefa add column sitacao char;
+alter table tb_tarefa add constraint fk_colab1 FOREIGN key (colaborador1) references tb_usuario(id_usuario) ;
+alter table tb_tarefa add constraint fk_colab2 FOREIGN key (colaborador2) references tb_usuario(id_usuario) ;
+alter table tb_tarefa add constraint fk_colab3 FOREIGN key (colaborador3) references tb_usuario(id_usuario) ;
 ------------- USUARIOS ------------------
 
 INSERT INTO tb_usuario VALUES (1, "Professor A", "1234567", "2022002", "professor", "professorA", "senha");

@@ -40,7 +40,8 @@ menuAluno originalMenu matriz = do
     let nome = Util.convert(Util.getName (Util.matrizToList matriz))
     putStrLn("Olá aluno: "++nome++"! O que deseja?")
     putStrLn("[1] para cadastrar as cadeiras.")
-    putStrLn("[2] para deslogar")
+    putStrLn("[2] para cadastrar tarefas.")
+    putStrLn("[3] para deslogar")
 
     opcao <- Entry.lerEntrada
     if opcao == "1"
@@ -56,8 +57,17 @@ menuAluno originalMenu matriz = do
             putStrLn result
             putStrLn("\n")
             menuInserir "" originalMenu matriz
-
     else if opcao == "2"
+        then do
+            putStrLn("Descreva a tarefa que deve ser executada.")
+            description <- Entry.lerEntrada
+            putStrLn("informe o numero da matricula do colaborador.")
+            matricula <- Entry.lerEntrada
+            putStrLn("Informe a data e Hora que deseja ser notificado.")
+            putStrLn("Inserir os dados seguindo essa estruruta 'YYYY-MM-DD HH:MM:SS'")
+            notificado <- Entry.lerEntrada        
+            menuAluno originalMenu matriz         
+    else if opcao == "3"
         then do originalMenu(nome++" foi deslogado!")
     else
         originalMenu("Operação Inválida")
