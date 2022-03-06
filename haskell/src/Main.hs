@@ -6,14 +6,12 @@ import Util.Entry
 
 main :: IO ()
 main = do 
-    menuPrincipal("Iniciando")
-    
+    menuPrincipal(" #####   ######   #####    ######   ##  ##    ####     ####     ####    #####     ####    #####\n##       ##       ##  ##   ##       ### ##   ##  ##     ##     ##  ##   ##  ##   ##  ##   ##  ##\n## ###   #####    #####    #####    ######   ##         ##     ######   ##  ##   ##  ##   #####\n##  ##   ##       ##  ##   ##       ## ###   ##  ##     ##     ##  ##   ##  ##   ##  ##   ##  ##\n ####    ######   ##  ##   ######   ##  ##    ####     ####    ##  ##   #####     ####    ##  ##\n\n ####     ####     ####    #####    ######   ##   ##   ####     ####     ####\n##  ##   ##  ##   ##  ##   ##  ##   ##       #######    ##     ##  ##   ##  ##\n######   ##       ######   ##  ##   #####    ## # ##    ##     ##       ##  ## \n##  ##   ##  ##   ##  ##   ##  ##   ##       ## # ##    ##     ##  ##   ##  ##\n##  ##    ####    ##  ##   #####    ######   ## # ##   ####     ####     ####\n")
 
 menuPrincipal :: String -> IO ()
 menuPrincipal msg = do
     clearScreen
     putStrLn(msg)
-    putStrLn("Gerenciador de cronograma acadêmico")
     putStrLn("[1] Para fazer login")
     putStrLn("[2] Para fazer cadastro")
     opcao <- lerEntrada
