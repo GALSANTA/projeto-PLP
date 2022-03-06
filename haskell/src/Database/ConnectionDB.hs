@@ -31,13 +31,14 @@ getUser user password = do
     queryStmt conn query [MySQLText a, MySQLText b]
 
 
-verifyData :: String -> String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
-verifyData cpf matricula = do
+verifyData :: String -> String -> String-> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+verifyData cpf matricula usuario = do
     let a = TS.pack(cpf)
     let b = TS.pack(matricula) 
+    let c = TS.pack(usuario)
     conn <- connectDB
-    query <- prepareStmt conn "SELECT * FROM tb_usuario WHERE cpf=? OR matricula=?"
-    queryStmt conn query [MySQLText a, MySQLText b]
+    query <- prepareStmt conn "SELECT * FROM tb_usuario WHERE cpf=? OR matricula=? OR usuario=?"
+    queryStmt conn query [MySQLText a, MySQLText b, MySQLText c]
 
 validateRegistry:: (String -> IO ()) -> [[MySQLValue]] -> String -> String -> String -> String -> String -> String -> IO()
 validateRegistry originalMenu matriz nome cpf usuario senha matricula profissao =if matriz == []

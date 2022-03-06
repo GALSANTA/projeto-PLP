@@ -44,7 +44,7 @@ signUp originalMenu = do
     putStrLn("Senha: ")
     senha <- Entry.lerEntrada
 
-    (defs, is) <- verifyData cpf matricula
+    (defs, is) <- verifyData cpf matricula usuario
     matriz <- Streams.toList is
     
     validateRegistry originalMenu matriz nome cpf usuario senha matricula profissao
