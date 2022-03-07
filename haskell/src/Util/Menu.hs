@@ -40,7 +40,9 @@ menuAluno originalMenu matriz = do
     let nome = Util.convert(Util.getName (Util.matrizToList matriz))
     putStrLn("Olá aluno: "++nome++"! O que deseja?")
     putStrLn("[1] para cadastrar as cadeiras.")
-    putStrLn("[2] para deslogar")
+    putStrLn("[2] para cadastrar tarefas.")
+    putStrLn("[3] para visualizar tarefas.")
+    putStrLn("[4] para deslogar")
 
     opcao <- Entry.lerEntrada
     if opcao == "1"
@@ -65,30 +67,42 @@ menuAluno originalMenu matriz = do
             putStrLn("Descreva a tarefa que deve ser executada.")
             descricao <- Entry.lerEntrada
             putStrLn("Informe a data e Hora do envio.")
-            putStrLn("Inserir os dados seguindo essa estruruta 'YYYY-MM-DD HH:MM:SS'")
+            putStrLn("Inserir os dados seguindo essa estruruta 'YYYY-MM-DD'")
             envio <- Entry.lerEntrada
             putStrLn("Informe a data e Hora que desea ser notificado.")
-            putStrLn("Inserir os dados seguindo essa (estruruta 'YYYY-MM-DD HH:MM:SS'")
-            notificacao <- Entry.lerEntrada  
             putStrLn("Qual a relevancia?")
             putStrLn("1-Alta 2-Média 3-Baixa") 
             relevancia <- Entry.lerEntrada  
             let id_aluno = Util.convert(Util.getId(Util.matrizToList matriz))
-
-            inserirTarefa id_aluno id_colaborador id_disciplina descricao envio notificacao relevancia
+            inserirTarefa id_aluno id_colaborador id_disciplina descricao envio relevancia
+            putStrLn("Tarefa inserida com sucesso!...")
             putStrLn("Pressione enter para continuar...")
-            teste <- Entry.lerEntrada
-
+            buffer <- Entry.lerEntrada
             menuAluno originalMenu matriz
-            --menuAluno originalMenu matriz     
+
     else if opcao == "3"
         then do
             let id_aluno = Util.convert(Util.getId(Util.matrizToList matriz))
-            putStrLn("informe como deseja visualizar as Tarefas")
-            putStrLn("1- Baixa relevancia 2-Media relevancia 3-Alta relevancia 4-Crescente 5-Decrescente")
+            putStrLn("\nInforme como deseja visualizar as Tarefas")
+            putStrLn("1-Alta relevancia 2-Média relevancia 3-Baixa relevancia 4-Crescente 5-Decrescente")
             op <- Entry.lerEntrada
-            if op == "1" or op == "2" or op == "3" then do
-                (defs, is) <- ordernarTarefasRelevancia id_aluno op 
+            if op == "1" || op == "2" || op == "3" 
+                then do
+                    (defs, is) <- ordernarTarefasRelevancia id_aluno op 
+                    t <- Streams.toList is
+                    let aux_tarefas = Util.tarefas t
+                    if aux_tarefas /= [] then
+                        putStrLn aux_tarefas
+                    else 
+                        putStrLn "Sem tarefas atribuidas"
+
+                    putStrLn("Pressione enter para continuar...")
+                    buffer <- Entry.lerEntrada
+                    menuAluno originalMenu matriz
+
+            else if op == "4" 
+                then do
+                    (defs, is) <- ordernarTarefasASC id_aluno
                     t <- Streams.toList is
                     let aux_tarefas = Util.tarefas t
                     if aux_tarefas /= [] then
@@ -98,8 +112,10 @@ menuAluno originalMenu matriz = do
 
                     putStrLn("Pressione enter para continuar...")
                     teste <- Entry.lerEntrada
-            if else op == "4" then do
-                (defs, is) <- ordernarTarefasMenor id_aluno 
+                    menuAluno originalMenu matriz
+            else if op == "5" 
+                then do
+                    (defs, is) <- ordernarTarefasDESC id_aluno
                     t <- Streams.toList is
                     let aux_tarefas = Util.tarefas t
                     if aux_tarefas /= [] then
@@ -109,17 +125,7 @@ menuAluno originalMenu matriz = do
 
                     putStrLn("Pressione enter para continuar...")
                     teste <- Entry.lerEntrada
-            if else op == "5" then do
-                (defs, is) <- ordernarTarefasMaior id_aluno 
-                    t <- Streams.toList is
-                    let aux_tarefas = Util.tarefas t
-                    if aux_tarefas /= [] then
-                        putStrLn aux_tarefas
-                    else 
-                        putStrLn "Sem tarefas atribuidas"
-
-                    putStrLn("Pressione enter para continuar...")
-                    teste <- Entry.lerEntrada
+                    menuAluno originalMenu matriz
             else
                 putStrLn "invalido!"
             menuAluno originalMenu matriz
