@@ -101,11 +101,57 @@ showDependenciaClosed id_disciplina aluno_id  = do
     query <- prepareStmt conn "SELECT A.disciplina_id, nome_disciplina, nome FROM tb_dependencia AS A JOIN tb_aluno_disciplina AS B ON (A.disciplina_id = B.disciplina_id AND aluno_id=?) INNER JOIN tb_disciplina AS C ON (B.disciplina_id = C.id_disciplina) INNER JOIN tb_usuario AS D ON (D.id_usuario = C.professor_id) WHERE id=?"
     queryStmt conn query [MySQLText a, MySQLText b]
 
+inserirTarefa :: String -> String -> String -> String -> String -> String -> String -> IO OK
+inserirTarefa id_aluno id_colaborador id_disciplina descricao envio notificacao relevancia = do 
+    let aluno = TS.pack(id_aluno)
+    let colaborador = TS.pack(id_colaborador)
+    let disciplina =TS.pack(id_disciplina)
+    let aux_descricao = TS.pack(descricao)
+    let aux_envio = TS.pack(envio)
+    let aux_notificacao = TS.pack(notificacao)
+    let aux_relevancia = TS.pack(relevancia)    
+    conn <- connectDB
+    execute conn "INSERT INTO tb_tarefa VALUES (?,?,?, ?, ?, ?,?)" [MySQLText aluno, MySQLText colaborador,  MySQLText disciplina,  MySQLText aux_descricao, MySQLText aux_envio , MySQLText aux_notificacao, MySQLText aux_relevancia]
 
-    -- SELECT A.disciplina_id, nome_disciplina, nome FROM tb_dependencia AS A 
-    -- JOIN tb_aluno_disciplina AS B ON (A.disciplina_id = B.disciplina_id AND aluno_id=4)
-    -- INNER JOIN tb_disciplina AS C ON (B.disciplina_id = C.id_disciplina)
-    -- INNER JOIN tb_usuario AS D ON (D.id_usuario = C.professor_id)
-    -- WHERE id=11
+ordernarTarefasRelevancia :: String -> String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+ordernarTarefasRelevancia id_aluno relevancia = do
+    let aux_aluno = TS.pack(id_aluno)
+    let aux_relevancia = TS.pack(relevancia)
 
-    -- SELECT disciplina_id, nome_disciplina, nome FROM tb_dependencia AS A JOIN tb_disciplina AS B ON (A.disciplina_id = B.id_disciplina) INNER JOIN tb_usuario AS C ON (C.id_usuario = B.professor_id) WHERE id=11
+    conn <- connectDB
+    --queryStmt  prepareStmt conn "SELECT * from tb_tarefa where id_aluno = id_Aluno or id_colaborador = id_Aluno"
+    query <- prepareStmt conn "SELECT * from tb_tarefa where id_aluno = ? or id_colaborador = ? and relevancia = ?"
+    queryStmt conn query [MySQLText aux_aluno, MySQLText aux_aluno, MySQLText aux_relevancia]
+ 
+    
+ordernarTarefasMaior :: String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+ordernarTarefasMaior id_aluno = do
+    let aux_aluno = TS.pack(id_aluno)
+
+
+    conn <- connectDB
+    --queryStmt  prepareStmt conn "SELECT * from tb_tarefa where id_aluno = id_Aluno or id_colaborador = id_Aluno"
+    query <- prepareStmt conn "SELECT * from tb_tarefa where id_aluno = ? or id_colaborador = ? order by relevancia desc"
+    queryStmt conn query [MySQLText aux_aluno, MySQLText aux_aluno]
+    
+    
+ordernarTarefasMenor :: String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+ordernarTarefasMenor id_aluno = do
+    let aux_aluno = TS.pack(id_aluno)
+
+
+    conn <- connectDB
+    --queryStmt  prepareStmt conn "SELECT * from tb_tarefa where id_aluno = id_Aluno or id_colaborador = id_Aluno"
+    query <- prepareStmt conn "SELECT * from tb_tarefa where id_aluno = ? or id_colaborador = ? order by relevancia asc"
+    queryStmt conn query [MySQLText aux_aluno, MySQLText aux_aluno]
+    
+
+ordernarTarefas :: String -> IO ([ColumnDef], Streams.InputStream [MySQLValue])
+ordernarTarefas id_aluno = do
+    let aux_aluno = TS.pack(id_aluno)
+    
+
+    conn <- connectDB
+    --queryStmt  prepareStmt conn "SELECT * from tb_tarefa where id_aluno = id_Aluno or id_colaborador = id_Aluno"
+    query <- prepareStmt conn "SELECT * from tb_tarefa where id_aluno = ? or id_colaborador = ?"
+    queryStmt conn query [MySQLText aux_aluno, MySQLText aux_aluno]

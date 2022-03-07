@@ -46,3 +46,25 @@ getNameDisciplina (id:name:tail) = name
 
 getNameProfessor:: [MySQLValue] -> MySQLValue
 getNameProfessor (id:name:nameP:tail) = nameP
+
+----------------------------------------------------------------
+
+getDisciplinaTarefa :: [MySQLValue] -> MySQLValue
+getDisciplinaTarefa (id:disciplina:tail) = disciplina
+
+getDescricaoTarefa :: [MySQLValue] -> MySQLValue
+getDescricaoTarefa (id:disciplina:descricao:tail) = descricao
+
+getEnvioTarefa :: [MySQLValue] -> MySQLValue
+getEnvioTarefa (id:disciplina:descricao:envio:tail) = envio
+
+getNotificacaoTarefa :: [MySQLValue] -> MySQLValue
+getNotificacaoTarefa (id:disciplina:descricao:envio:notificacao:tail) = notificacao
+
+getRelevanciaTarefa :: [MySQLValue] -> MySQLValue
+getRelevanciaTarefa (id:disciplina:descricao:envio:notificacao:relevancia:tail) = relevancia
+
+
+tarefas :: [[MySQLValue]] -> String
+tarefas [] = []
+tarefas (t:ts) = "\n" ++ convert(getDisciplinaTarefa t) ++ " - " ++ convert(getDescricaoTarefa t) ++ " - " ++ convert(getEnvioTarefa t) ++ " - " ++ convert(getNotificacaoTarefa t)++ " - " ++ convert(getRelevanciaTarefa t) ++ tarefas ts

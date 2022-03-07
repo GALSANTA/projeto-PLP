@@ -56,8 +56,74 @@ menuAluno originalMenu matriz = do
             putStrLn result
             putStrLn("\n")
             menuInserir "" originalMenu matriz
-
     else if opcao == "2"
+        then do
+            putStrLn("Id do colaborador.")
+            id_colaborador <- Entry.lerEntrada
+            putStrLn("Id do disciplina.")
+            id_disciplina <- Entry.lerEntrada
+            putStrLn("Descreva a tarefa que deve ser executada.")
+            descricao <- Entry.lerEntrada
+            putStrLn("Informe a data e Hora do envio.")
+            putStrLn("Inserir os dados seguindo essa estruruta 'YYYY-MM-DD HH:MM:SS'")
+            envio <- Entry.lerEntrada
+            putStrLn("Informe a data e Hora que desea ser notificado.")
+            putStrLn("Inserir os dados seguindo essa (estruruta 'YYYY-MM-DD HH:MM:SS'")
+            notificacao <- Entry.lerEntrada  
+            putStrLn("Qual a relevancia?")
+            putStrLn("1-Alta 2-Média 3-Baixa") 
+            relevancia <- Entry.lerEntrada  
+            let id_aluno = Util.convert(Util.getId(Util.matrizToList matriz))
+
+            inserirTarefa id_aluno id_colaborador id_disciplina descricao envio notificacao relevancia
+            putStrLn("Pressione enter para continuar...")
+            teste <- Entry.lerEntrada
+
+            menuAluno originalMenu matriz
+            --menuAluno originalMenu matriz     
+    else if opcao == "3"
+        then do
+            let id_aluno = Util.convert(Util.getId(Util.matrizToList matriz))
+            putStrLn("informe como deseja visualizar as Tarefas")
+            putStrLn("1- Baixa relevancia 2-Media relevancia 3-Alta relevancia 4-Crescente 5-Decrescente")
+            op <- Entry.lerEntrada
+            if op == "1" or op == "2" or op == "3" then do
+                (defs, is) <- ordernarTarefasRelevancia id_aluno op 
+                    t <- Streams.toList is
+                    let aux_tarefas = Util.tarefas t
+                    if aux_tarefas /= [] then
+                        putStrLn aux_tarefas
+                    else 
+                        putStrLn "Sem tarefas atribuidas"
+
+                    putStrLn("Pressione enter para continuar...")
+                    teste <- Entry.lerEntrada
+            if else op == "4" then do
+                (defs, is) <- ordernarTarefasMenor id_aluno 
+                    t <- Streams.toList is
+                    let aux_tarefas = Util.tarefas t
+                    if aux_tarefas /= [] then
+                        putStrLn aux_tarefas
+                    else 
+                        putStrLn "Sem tarefas atribuidas"
+
+                    putStrLn("Pressione enter para continuar...")
+                    teste <- Entry.lerEntrada
+            if else op == "5" then do
+                (defs, is) <- ordernarTarefasMaior id_aluno 
+                    t <- Streams.toList is
+                    let aux_tarefas = Util.tarefas t
+                    if aux_tarefas /= [] then
+                        putStrLn aux_tarefas
+                    else 
+                        putStrLn "Sem tarefas atribuidas"
+
+                    putStrLn("Pressione enter para continuar...")
+                    teste <- Entry.lerEntrada
+            else
+                putStrLn "invalido!"
+            menuAluno originalMenu matriz
+    else if opcao == "4"
         then do originalMenu(nome++" foi deslogado!")
     else
         originalMenu("Operação Inválida")
