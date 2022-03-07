@@ -32,7 +32,7 @@ menuProfessor originalMenu matriz = do
     else if opcao == "2"
         then do originalMenu(nome++" foi deslogado!")
     else
-        originalMenu("Operação Inválida")
+        originalMenu("Operação Inválida!")
 
 menuAluno:: (String -> IO ()) -> [[MySQLValue]] -> IO ()
 menuAluno originalMenu matriz = do
