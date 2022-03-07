@@ -58,5 +58,4 @@ validateDisciplina originalMenu menuProfessor matrizMenu matriz disciplina aluno
     else
         putStrLn("Aluno não cadastrado na disciplina!")
         putStrLn("--- aperte enter ---")
-        v <- Entry.lerEntrada
         menuProfessor originalMenu matrizMenu
