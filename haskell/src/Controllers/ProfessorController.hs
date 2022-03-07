@@ -9,8 +9,8 @@ import Database.ConnectionDB as ConnectionDB
 import Database.MySQL.Base
 import System.Console.ANSI
 
-atualizaNota:: (String -> IO ()) -> IO()
-atualizaNota originalMenu = do
+atualizaNota:: (String -> IO ()) -> ((String -> IO ()) -> [[MySQLValue]] -> IO ()) -> ([[MySQLValue]]) ->IO()
+atualizaNota originalMenu menuProfessor matrizMenu= do
     clearScreen
     putStrLn("Id da disciplina: ")
     id_d <- Entry.lerInt
@@ -22,7 +22,7 @@ atualizaNota originalMenu = do
     (defs, is) <- verifyDisciplinaAluno id_d id_a
     matriz <- Streams.toList is
 
-    validateDisciplina originalMenu matriz id_d id_a n
+    validateDisciplina originalMenu menuProfessor matrizMenu matriz id_d id_a n
 
 
 retornaInteger:: Int -> Integer
@@ -47,10 +47,16 @@ verifyDisciplinaAluno id_disciplina id_aluno = do
     query <- prepareStmt conn "SELECT * FROM tb_aluno_disciplina WHERE aluno_id=? AND disciplina_id=?"
     queryStmt conn query [MySQLInt32U a, MySQLInt32U d]
 
-validateDisciplina:: (String -> IO ()) -> [[MySQLValue]] -> Int -> Int -> Int -> IO()
-validateDisciplina originalMenu matriz disciplina aluno nota = if matriz /= []
+validateDisciplina:: (String -> IO ()) -> ((String -> IO ()) -> [[MySQLValue]] -> IO ()) -> ([[MySQLValue]]) -> [[MySQLValue]] -> Int -> Int -> Int -> IO()
+validateDisciplina originalMenu menuProfessor matrizMenu matriz disciplina aluno nota = if matriz /= []
         then do
             updateDb disciplina aluno nota
-            originalMenu("Nota atualizada com sucesso!")
+            putStrLn("Nota atualizada com sucesso!")
+            putStrLn("--- aperte enter ---")
+            v <- Entry.lerEntrada
+            menuProfessor originalMenu matrizMenu
     else
-        originalMenu("Aluno não está cursando a disciplina!")
+        putStrLn("Aluno não cadastrado na disciplina!")
+        putStrLn("--- aperte enter ---")
+        v <- Entry.lerEntrada
+        menuProfessor originalMenu matrizMenu

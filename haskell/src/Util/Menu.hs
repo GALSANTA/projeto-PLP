@@ -28,7 +28,7 @@ menuProfessor originalMenu matriz = do
 
     opcao <- Entry.lerEntrada
     if opcao == "1"
-        then do ProfessorController.atualizaNota originalMenu
+        then do ProfessorController.atualizaNota originalMenu menuProfessor matriz
     else if opcao == "2"
         then do originalMenu(nome++" foi deslogado!")
     else
