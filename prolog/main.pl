@@ -1,2 +1,1 @@
-main:-
-write("TESTE").
+:- include('menuController.pl').
