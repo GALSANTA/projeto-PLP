@@ -4,12 +4,21 @@ create_conn :-
     odbc_connect('projetoPLP', _,
                     [ user('remote'),
                     password('123'),
-                    alias('conn'),
+                    alias(conn),
                     open(once)
                     ]).
 
 drop_connection :-
     odbc_disconnect(conn).
+
+getUser(F) :-
+    write('Digite seu usuario: '), nl,
+    read(Usuario),
+    write('Digite sua senha: '), nl,
+    read(Senha),
+        odbc_query(conn, 
+                    "SELECT (nome) FROM tb_usuario WHERE usuario='~w' AND senha='~w'"-[Usuario, Senha],
+                    row(F)), write(F).
 
 cadastra_usuario(F) :-
     write('Digite seu nome: '), nl,
