@@ -32,12 +32,20 @@ validate_registry(Cpf, Matricula, Usuario, Result) :-
                 Result, [ types([integer,default, default, default, default, default, default])
                 ]).
 
-update_nota(Disciplina, Aluno, Nota, Result):-
+update_nota(Disciplina, Aluno, Nota):-
     odbc_query('conn',
-                "UPDATE tb_aluno_disciplina SET nota='~w' WHERE aluno_id='~w' AND disciplina_id='~w'"-[Nota, Aluno, Disciplina],
-                Result).
+                "UPDATE tb_aluno_disciplina SET nota='~w' WHERE aluno_id='~w' AND disciplina_id='~w'"-[Nota, Aluno, Disciplina]),
+                write('Nota atualizada com sucesso!').
 
-verify_disciplina(Disciplina, Aluno, Result):-
+verify_disciplina_aluno(Disciplina, Aluno, Result):-
     odbc_query('conn',
                 "SELECT * FROM tb_aluno_disciplina WHERE aluno_id='~w' AND disciplina_id='~w'"-[Aluno, Disciplina],
                 Result).
+
+verify_disciplina(Disciplina):-
+    odbc_query('conn',
+                "SELECT * FROM tb_disciplina WHERE id_disciplina='~w'"-[Disciplina]).
+
+verify_aluno(Aluno):-
+    odbc_query('conn',
+                "SELECT * FROM tb_usuario WHERE id_usuario='~w'"-[ALuno]).
