@@ -20,20 +20,14 @@ getUser(F) :-
                     "SELECT (nome) FROM tb_usuario WHERE usuario='~w' AND senha='~w'"-[Usuario, Senha],
                     row(F)), write(F).
 
-cadastra_usuario(F) :-
-    write('Digite seu nome: '), nl,
-    read(Nome),
-    write('Digite seu cpf: '), nl,
-    read(Cpf),
-    write('Digite sua Matricula: '), nl,
-    read(Matricula),
-    write('Digite sua Profissão: '), nl,
-    read(Profissao),
-    write('Digite seu Usuario: '), nl,
-    read(Usuario),
-    write('Digite sua Senha: '), nl,
-    read(Senha),
+cadastra_usuario(Nome, Cpf, Matricula, Profissao, Usuario, Senha, F) :-
     odbc_query('conn',
                 "INSERT INTO tb_usuario (nome, cpf, matricula, profissao, usuario, senha)
                  VALUES ('~w', '~w', '~w', '~w', '~w', '~w')"-[Nome, Cpf, Matricula, Profissao, Usuario, Senha],
                 affected(F)).
+
+validate_registry(Cpf, Matricula, Usuario, Result) :- 
+    odbc_query('conn',
+                "SELECT * FROM tb_usuario WHERE cpf='~w' OR matricula='~w' OR usuario='~w'"-[Cpf, Matricula, Usuario],
+                Result, [ types([integer,default, default, default, default, default, default])
+                ]).
