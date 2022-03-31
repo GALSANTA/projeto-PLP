@@ -31,3 +31,13 @@ validate_registry(Cpf, Matricula, Usuario, Result) :-
                 "SELECT * FROM tb_usuario WHERE cpf='~w' OR matricula='~w' OR usuario='~w'"-[Cpf, Matricula, Usuario],
                 Result, [ types([integer,default, default, default, default, default, default])
                 ]).
+
+update_nota(Disciplina, Aluno, Nota, Result):-
+    odbc_query('conn',
+                "UPDATE tb_aluno_disciplina SET nota='~w' WHERE aluno_id='~w' AND disciplina_id='~w'"-[Nota, Aluno, Disciplina],
+                Result).
+
+verify_disciplina(Disciplina, Aluno, Result):-
+    odbc_query('conn',
+                "SELECT * FROM tb_aluno_disciplina WHERE aluno_id='~w' AND disciplina_id='~w'"-[Aluno, Disciplina],
+                Result).

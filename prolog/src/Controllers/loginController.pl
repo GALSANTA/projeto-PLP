@@ -13,7 +13,6 @@ signUp :-
     read(Usuario),
     write('Digite sua Senha: '), nl,
     read(Senha),
-    (validate_registry(Cpf, Matricula, Usuario, Result) -> write('Usuario já possui uma conta no sistema!'), halt;
+    (validate_registry(Cpf, Matricula, Usuario, Result) -> write('Usuario já possui uma conta no sistema!'),nl, halt;
     cadastra_usuario(Nome, Cpf, Matricula, Profissao, Usuario, Senha, F) -> write('Cadastro Realizado!'), nl, halt;
-    write('Não foi possivel realizar o cadastro')).
-    
+    write('Não foi possivel realizar o cadastro'), nl, halt).
