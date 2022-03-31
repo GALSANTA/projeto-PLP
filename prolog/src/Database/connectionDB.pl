@@ -11,14 +11,10 @@ create_conn :-
 drop_connection :-
     odbc_disconnect(conn).
 
-getUser(F) :-
-    write('Digite seu usuario: '), nl,
-    read(Usuario),
-    write('Digite sua senha: '), nl,
-    read(Senha),
-        odbc_query(conn, 
-                    "SELECT (nome) FROM tb_usuario WHERE usuario='~w' AND senha='~w'"-[Usuario, Senha],
-                    row(F)), write(F).
+getUser(Usuario, Senha, Result) :-
+    odbc_query(conn, 
+                "SELECT (nome) FROM tb_usuario WHERE usuario='~w' AND senha='~w'"-[Usuario, Senha],
+                row(Result)).
 
 cadastra_usuario(Nome, Cpf, Matricula, Profissao, Usuario, Senha, F) :-
     odbc_query('conn',

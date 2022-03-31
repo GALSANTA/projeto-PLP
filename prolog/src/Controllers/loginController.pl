@@ -1,4 +1,13 @@
 :- include('../Database/connectionDB.pl').
+:- include('../Util/menu.pl').
+
+signIn :- 
+    tty_clear,
+    write("Digite o usuário"), nl,
+    read(Usuario),
+    write("Digite a senha"), nl,
+    read(Senha),
+    (getUser(Usuario, Senha, Result) -> menuAluno; write("Usuário não encontrado!")).
 
 signUp :-
     write('Digite seu nome: '), nl,

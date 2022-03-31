@@ -16,4 +16,4 @@ write("[2] Para fazer cadastro"), nl,
 read(Opcao),
 escolheOpcao(Opcao).
 
-escolheOpcao(Opcao):-(Opcao = 1 -> login; Opcao = 2 -> signUp; write('Opção inválida!'), menuPrincipal).
+escolheOpcao(Opcao):-(Opcao = 1 -> signIn; Opcao = 2 -> signUp; write('Opção inválida!'), menuPrincipal).
