@@ -1,3 +1,6 @@
+-- drop database projetoPLP;
+CREATE DATABASE projetoPLP;
+USE projetoPLP;
 CREATE TABLE tb_usuario (
    id_usuario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
    nome VARCHAR(100) NOT NULL,
@@ -30,20 +33,17 @@ CREATE TABLE tb_dependencia (
    CONSTRAINT `fk_dependencia_segunda` FOREIGN KEY (disciplina_id) REFERENCES tb_disciplina (id_disciplina)
 );
 
-
--- 
-create table tb_tarefa(
-   id int AUTO_INCREMENT primary key,
+CREATE TABLE tb_tarefa(
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   aluno_id INT NOT NULL,
    descricao varchar(255) NOT NULL,
-   colaborador1 int,
-   colaborador2 int,
-   colaborador3 int,
-   CONSTRAINT `fk_colabordor1` FOREIGN KEY (colaborador1) REFERENCES tb_usuario (id),
-    CONSTRAINT `fk_colabordor2` FOREIGN KEY (colaborador2) REFERENCES tb_usuario (id),
-     CONSTRAINT `fk_colabordor3` FOREIGN KEY (colaborador3) REFERENCES tb_usuario (id)
-
-   );
-   alter table tb_tarefa add column notificacao DATETIME;
+   colaborador_id INT NOT NULL,
+   disciplina_id INT NOT NULL,
+   relevancia char(1) NOT NULL,
+   CONSTRAINT `fk_tarefa_disciplina` FOREIGN KEY (disciplina_id) REFERENCES tb_disciplina (id_disciplina),
+   CONSTRAINT `fk_colaborador` FOREIGN KEY (colaborador_id) REFERENCES tb_usuario (id_usuario)
+);
+   
 
 ------------- USUARIOS ------------------
 
@@ -57,84 +57,84 @@ INSERT INTO tb_usuario VALUES (6, "Aluno C", "1234567", "2022007", "aluno", "alu
 ------------- DISCIPLINAS ---------------
 
 -- periodo I 
-INSERT INTO tb_disciplina VALUES (1, "FUND DE MATEMATICA P/ C.DA COMPUTACAO I", "1",  3);
-INSERT INTO tb_disciplina VALUES (2, "PROGRAMAÇÃO I", "1", 4);
-INSERT INTO tb_disciplina VALUES (3, "LABORATÓRIO DE PROGRAMAÇÃO I", "1",  5);
-INSERT INTO tb_disciplina VALUES (4, "INTRODUÇÃO A COMPUTAÇÃO", "1",  3);
+INSERT INTO tb_disciplina VALUES (1, "FUND DE MATEMATICA P/ C.DA COMPUTACAO I", "1",  1);
+INSERT INTO tb_disciplina VALUES (2, "PROGRAMAÇÃO I", "1", 2);
+INSERT INTO tb_disciplina VALUES (3, "LABORATÓRIO DE PROGRAMAÇÃO I", "1",  3);
+INSERT INTO tb_disciplina VALUES (4, "INTRODUÇÃO A COMPUTAÇÃO", "1",  1);
 
 -- periodo II 
-INSERT INTO tb_disciplina VALUES (5, "CALCULO DIFERENCIAL E INTEGRAL I", "2",  4);
-INSERT INTO tb_disciplina VALUES (6, "FUND DE MATEMATICA P/ C.DA COMPUTACAO II", "2",  5);
-INSERT INTO tb_disciplina VALUES (7, "LABORATÓRIO DE PROGRAMAÇÃO II", "2",  3);
-INSERT INTO tb_disciplina VALUES (8, "PROGRAMAÇÃO II", "2",  4);
+INSERT INTO tb_disciplina VALUES (5, "CALCULO DIFERENCIAL E INTEGRAL I", "2",  2);
+INSERT INTO tb_disciplina VALUES (6, "FUND DE MATEMATICA P/ C.DA COMPUTACAO II", "2",  3);
+INSERT INTO tb_disciplina VALUES (7, "LABORATÓRIO DE PROGRAMAÇÃO II", "2",  1);
+INSERT INTO tb_disciplina VALUES (8, "PROGRAMAÇÃO II", "2",  2);
 
 -- periodo III
-INSERT INTO tb_disciplina VALUES (9, "ALGEBRA LINEAR I", "3",  5);
-INSERT INTO tb_disciplina VALUES (10, "CALCULO DIFERENCIAL E INTEGRAL II", "3",  3);
-INSERT INTO tb_disciplina VALUES (11, "ESTRUTURA DE DADOS", "3",  4);
-INSERT INTO tb_disciplina VALUES (12, "LABORATORIO DE ESTRUTURA DE DADOS", "3",  5);
+INSERT INTO tb_disciplina VALUES (9, "ALGEBRA LINEAR I", "3",  3);
+INSERT INTO tb_disciplina VALUES (10, "CALCULO DIFERENCIAL E INTEGRAL II", "3",  1);
+INSERT INTO tb_disciplina VALUES (11, "ESTRUTURA DE DADOS", "3",  1);
+INSERT INTO tb_disciplina VALUES (12, "LABORATORIO DE ESTRUTURA DE DADOS", "3",  2);
 INSERT INTO tb_disciplina VALUES (13, "LOGICA PARA COMPUTACAO", "3",  3);
-INSERT INTO tb_disciplina VALUES (14, "TEORIA DOS GRAFOS", "3",  4);
+INSERT INTO tb_disciplina VALUES (14, "TEORIA DOS GRAFOS", "3",  1);
 
 -- periodo IV
-INSERT INTO tb_disciplina VALUES (15, "INTRODUÇÃO À PROBABILIDADE", "4",  5);
+INSERT INTO tb_disciplina VALUES (15, "INTRODUÇÃO À PROBABILIDADE", "4",  2);
 INSERT INTO tb_disciplina VALUES (16, "PROJETO DE SOFTWARE", "4",  3);
-INSERT INTO tb_disciplina VALUES (17, "ORGANIZACAO E ARQUIT. DE COMPUTADORES", "4",  4);
-INSERT INTO tb_disciplina VALUES (18, "LAB.DE ORG.E ARQUITETURA DE COMPUTADORES", "4",  5);
+INSERT INTO tb_disciplina VALUES (17, "ORGANIZACAO E ARQUIT. DE COMPUTADORES", "4",  1);
+INSERT INTO tb_disciplina VALUES (18, "LAB.DE ORG.E ARQUITETURA DE COMPUTADORES", "4",  2);
 INSERT INTO tb_disciplina VALUES (19, "PARADIGMAS DE LINGUAGEM DE PROGRAMACAO", "4",  3);
-INSERT INTO tb_disciplina VALUES (20, "BANCO DE DADOS I", "4",  4);
+INSERT INTO tb_disciplina VALUES (20, "BANCO DE DADOS I", "4",  1);
 
 -- periodo V
-INSERT INTO tb_disciplina VALUES (21, "ANALISE DE SISTEMAS", "5",  5);
+INSERT INTO tb_disciplina VALUES (21, "ANALISE DE SISTEMAS", "5",  2);
 INSERT INTO tb_disciplina VALUES (22, "ENGENHARIA DE SOFTWARE", "5",  3);
-INSERT INTO tb_disciplina VALUES (23, "ESTATISTICA APLICADA", "5",  4);
-INSERT INTO tb_disciplina VALUES (24, "REDES DE COMPUTADORES", "5",  5);
+INSERT INTO tb_disciplina VALUES (23, "ESTATISTICA APLICADA", "5",  1);
+INSERT INTO tb_disciplina VALUES (24, "REDES DE COMPUTADORES", "5",  2);
 INSERT INTO tb_disciplina VALUES (25, "SISTEMAS OPERACIONAIS", "5",  3);
-INSERT INTO tb_disciplina VALUES (26, "TEORIA DA COMPUTAÇÃO", "5",  4);
+INSERT INTO tb_disciplina VALUES (26, "TEORIA DA COMPUTAÇÃO", "5",  1);
 
 -- periodo VI
-INSERT INTO tb_disciplina VALUES (27, "METODOLOGIA CIENTÍFICA", "6",  5);
+INSERT INTO tb_disciplina VALUES (27, "METODOLOGIA CIENTÍFICA", "6",  2);
 INSERT INTO tb_disciplina VALUES (28, "PROGRAMACAO CONCORRENTE", "6",  3);
-INSERT INTO tb_disciplina VALUES (29, "INTELIGENCIA ARTIFICIAL", "6",  4);
+INSERT INTO tb_disciplina VALUES (29, "INTELIGENCIA ARTIFICIAL", "6",  1);
 
 -- periodo VII
-INSERT INTO tb_disciplina VALUES (30, "ANÁLISE E TÉCNICA DE ALGORITMOS", "7",  5);
+INSERT INTO tb_disciplina VALUES (30, "ANÁLISE E TÉCNICA DE ALGORITMOS", "7",  2);
 INSERT INTO tb_disciplina VALUES (31, "COMPILADORES", "7",  3);
 
 -- periodo VIII
-INSERT INTO tb_disciplina VALUES (32, "PROJETO EM COMPUTAÇÃO I", "8",  4);
-INSERT INTO tb_disciplina VALUES (33, "PROJETO DE TRAB. DE CONCLUSAO DE CURSO", "8",  5);
+INSERT INTO tb_disciplina VALUES (32, "PROJETO EM COMPUTAÇÃO I", "8",  1);
+INSERT INTO tb_disciplina VALUES (33, "PROJETO DE TRAB. DE CONCLUSAO DE CURSO", "8",  2);
 
 -- periodo IX
 INSERT INTO tb_disciplina VALUES (34, "PROJETO EM COMPUTAÇÃO II", "9",  3);
-INSERT INTO tb_disciplina VALUES (35, "TRABALHO DE CONCLUSAO DE CURSO", "9",  4);
+INSERT INTO tb_disciplina VALUES (35, "TRABALHO DE CONCLUSAO DE CURSO", "9",  1);
 
 -- Especificas
-INSERT INTO tb_disciplina VALUES (36, "ADMINISTRACAO DE SISTEMAS", "E",  5);
+INSERT INTO tb_disciplina VALUES (36, "ADMINISTRACAO DE SISTEMAS", "E",  1);
 INSERT INTO tb_disciplina VALUES (37, "ALGORITMOS AVANCADOS I", "E",  3);
-INSERT INTO tb_disciplina VALUES (38, "ALGORITMOS AVANCADOS II", "E",  4);
-INSERT INTO tb_disciplina VALUES (39, "ALGORITMOS AVANCADOS III", "E",  5);
+INSERT INTO tb_disciplina VALUES (38, "ALGORITMOS AVANCADOS II", "E",  1);
+INSERT INTO tb_disciplina VALUES (39, "ALGORITMOS AVANCADOS III", "E",  2);
 INSERT INTO tb_disciplina VALUES (40, "ALGORITMOS AVANCADOS IV", "E",  3);
 
-INSERT INTO tb_disciplina VALUES (41, "ADMINISTRACAO DE SISTEMAS GERENCIADORES DE BANCO DE DADOS", "E",  4);
-INSERT INTO tb_disciplina VALUES (42, "GERENCIA DE REDES", "E",  5);
+INSERT INTO tb_disciplina VALUES (41, "ADMINISTRACAO DE SISTEMAS GERENCIADORES DE BANCO DE DADOS", "E",  1);
+INSERT INTO tb_disciplina VALUES (42, "GERENCIA DE REDES", "E",  2);
 INSERT INTO tb_disciplina VALUES (43, "INTERCONEXAO DE REDES DE COMPUTADORES", "E",  3);
-INSERT INTO tb_disciplina VALUES (44, "PRINCIPIOS DE DESENVOLVIMENTO WEB", "E",  4);
-INSERT INTO tb_disciplina VALUES (45, "PROGRAMACAO EM BANCOS DE DADOS", "E",  5);
+INSERT INTO tb_disciplina VALUES (44, "PRINCIPIOS DE DESENVOLVIMENTO WEB", "E",  1);
+INSERT INTO tb_disciplina VALUES (45, "PROGRAMACAO EM BANCOS DE DADOS", "E",  1);
 INSERT INTO tb_disciplina VALUES (46, "RECONHEC. DE PADROES E REDES NEURAIS", "E",  3);
-INSERT INTO tb_disciplina VALUES (47, "SISTEMAS DE INFORMAÇÕES GEOGRÁFICAS", "E",  4);
-INSERT INTO tb_disciplina VALUES (48, "SISTEMAS DISTRIBUIDOS", "E",  5);
+INSERT INTO tb_disciplina VALUES (47, "SISTEMAS DE INFORMAÇÕES GEOGRÁFICAS", "E",  1);
+INSERT INTO tb_disciplina VALUES (48, "SISTEMAS DISTRIBUIDOS", "E",  2);
 
 -- optativas
 INSERT INTO tb_disciplina VALUES (49, "ADMINISTRACAO E EMPREENDEDORISMO", "O",  3);
-INSERT INTO tb_disciplina VALUES (50, "ALGEBRA VETORIAL E GEOMETRIA ANALÍTICA", "O",  4);
-INSERT INTO tb_disciplina VALUES (51, "CALCULO DIFERENCIAL E INTEGRAL III", "O",  5);
+INSERT INTO tb_disciplina VALUES (50, "ALGEBRA VETORIAL E GEOMETRIA ANALÍTICA", "O",  1);
+INSERT INTO tb_disciplina VALUES (51, "CALCULO DIFERENCIAL E INTEGRAL III", "O",  2);
 INSERT INTO tb_disciplina VALUES (52, "DIREITO E CIDADANIA", "O",  3);
-INSERT INTO tb_disciplina VALUES (53, "ECONOMIA", "O",  4);
-INSERT INTO tb_disciplina VALUES (54, "INFORMATICA E SOCIEDADE", "O",  5);
+INSERT INTO tb_disciplina VALUES (53, "ECONOMIA", "O",  1);
+INSERT INTO tb_disciplina VALUES (54, "INFORMATICA E SOCIEDADE", "O",  2);
 INSERT INTO tb_disciplina VALUES (55, "INGLÊS", "O",  3);
-INSERT INTO tb_disciplina VALUES (56, "LIBRAS", "O",  4);
-INSERT INTO tb_disciplina VALUES (57, "LINGUA PORTUGUESA", "O",  5);
+INSERT INTO tb_disciplina VALUES (56, "LIBRAS", "O",  1);
+INSERT INTO tb_disciplina VALUES (57, "LINGUA PORTUGUESA", "O",  2);
 
 ------------- ALUNO_DISCIPLINA ---------------
 
@@ -237,3 +237,5 @@ INSERT INTO tb_dependencia VALUES (46, 30); -- RECONHEC. DE PADROES E REDES NEUR
 -- Optativas
 INSERT INTO tb_dependencia VALUES (51, 10); -- CALCULO DIFERENCIAL E INTEGRAL III depende de CALCULO DIFERENCIAL E INTEGRAL II
 INSERT INTO tb_dependencia VALUES (51, 6); -- CALCULO DIFERENCIAL E INTEGRAL III depende de FMCC II
+
+INSERT INTO tb_tarefa VALUES (1, 1, "Crianças", 1, 1, 1);
