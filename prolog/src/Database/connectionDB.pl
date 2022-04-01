@@ -41,7 +41,7 @@ verify_disciplina_aluno(Disciplina, Aluno, Result):-
 
 verify_disciplina(Disciplina):-
     odbc_query('conn',
-                "SELECT * FROM tb_disciplina WHERE id_disciplina='~w'"-[Disciplina]).
+                "SELECT * FROM tb_disciplina WHERE id_disciplina=~w"-[Disciplina]).
 
 verify_aluno(Aluno):-
     odbc_query('conn',
@@ -59,7 +59,7 @@ inserir_disciplina(IdAluno, IdDisciplina) :-
                 "INSERT INTO tb_aluno_disciplina (aluno_id, disciplina_id, nota) VALUES ('~w','~w',0)"-[IdAluno, IdDisciplina],
                 Result).
 
-inserir_tarefa(Id, Descricao, Colaborador, Disciplina, Relevancia, Result):-
+einserir_tarefa(Id, Descricao, Colaborador, Disciplina, Relevancia, Result):-
     odbc_query('conn',
                 "INSERT INTO tb_tarefa VALUES (NULL,'~w','~w','~w','~w','~w')"-[Id, Descricao, Colaborador, Disciplina, Relevancia],
                 Result).

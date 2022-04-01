@@ -1,5 +1,4 @@
 :- include('../Controllers/alunoController.pl').
-:- include('../Controllers/professorController.pl').
 :- include('./util.pl').
 
 menu(Usuario) :- 
@@ -15,7 +14,19 @@ menuProfessor(Message, Nome):-
     write("[1] para atualizar nota de uma aluno."), nl,
     write("[2] para deslogar"), nl,
     read(Opcao),
-    (Opcao == 1 -> atualiza_nota, menuProfessor("Nota atualizada com sucesso!", Nome); Opcao == 2 -> menuPrincipal("Professor foi deslogado")).
+    (Opcao == 1 -> 
+
+        write('Id da disciplina: '), nl,
+        read(Id_d),
+        write('Id Aluno: '), nl,
+        read(Id_a),
+        write('Nota do aluno: '), nl,
+        read(Nota),
+        (verify_disciplina_aluno(Id_d, Id_a, Result) -> update_nota(Id_d, Id_a, Nota), menuProfessor("Aluno cadastrado com sucesso!", Nome);
+        \+ verify_disciplina(Id_d) -> menuProfessor("Disciplina não existe!", Nome);
+        \+ verify_aluno(Id_a) -> menuProfessor("Aluno não existe!", Nome);
+        menuProfessor("Aluno não cadastrado na disciplina informada", Nome), nl, halt)
+    ; Opcao == 2 -> menuPrincipal("Professor foi deslogado")).
 
 menuAluno(Usuario):-
     tty_clear,
