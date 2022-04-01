@@ -1,3 +1,5 @@
+:- include('../Controllers/alunoController.pl').
+
 menu(Usuario) :- 
 
     % Profissao é pega por algo que vem do usuario
@@ -44,8 +46,8 @@ menuAlunoCadastrar(Usuario):-
     read(Periodo), 
     write("Qual o numero de cadeiras que deseja cursar?"), nl,
     read(Quantidade),
-    write("Essas são as disciplinas que recomendamos para você! \n"), nl,
-    % disciplinas
+    write("Essas são as disciplinas que recomendamos para você!"), nl,
+    cadeiras(Periodo, Quantidade),
     menu(Usuario).
 
 menuAlunoCadastrarTarefas(Usuario):-

@@ -44,4 +44,30 @@ verify_disciplina(Disciplina):-
 
 verify_aluno(Aluno):-
     odbc_query('conn',
-                "SELECT * FROM tb_usuario WHERE id_usuario='~w'"-[ALuno]).
+                "SELECT * FROM tb_usuario WHERE id_usuario='~w'"-[Aluno]).
+
+cadeiras(Periodo, Quantidade, Result):-
+    odbc_query('conn',
+                "SELECT id_disciplina, nome_disciplina, nome  FROM tb_disciplina AS A INNER JOIN tb_usuario AS B ON B.id_usuario = A.professor_id WHERE (A.tipo='~w' OR A.tipo='O') ORDER BY id_disciplina LIMIT '~w'"-[Periodo, Quantidade],
+                Result, [ types([integer,default, default])
+                ]).
+
+inserir_tarefa(Aluno, Colaborador, Disciplina, Descricao, Envio, Relevancia, Result):-
+    odbc_query('conn',
+                "INSERT INTO tb_tarefa VALUES (NULL,'~w','~w','~w','~w','~w','~w')"-[Aluno, Colaborador, Disciplina, Descricao, Envio, Relevancia],
+                Result).
+
+ordenar_tarefas_relevancia(Aluno, Relevancia, Result):-
+    odbc_query('conn', 
+                "SELECT * FROM tb_tarefa WHERE aluno_id = '~w' OR colaborador_id = '~w' AND relevancia = '~w'"-[Aluno, Aluno, Relevancia],
+                Result).
+
+ordenar_tarefas_asc(Aluno, Result):-
+    odbc_query('conn',
+                "SELECT * FROM tb_tarefa WHERE aluno_id = '~w' OR colaborador_id = '~w' ORDER BY relevancia ASC"-[Aluno, Aluno],
+                Result).
+
+ordenar_tarefas_desc(Aluno, Result):-
+    odbc_query('conn',
+                "SELECT * FROM tb_tarefa WHERE aluno_id = '~w' OR colaborador_id = '~w' ORDER BY relevancia DESC"-[Aluno, Aluno],
+                Result).
