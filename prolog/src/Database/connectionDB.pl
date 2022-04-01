@@ -11,10 +11,11 @@ create_conn :-
 drop_connection :-
     odbc_disconnect(conn).
 
-getUser(Usuario, Senha, Result) :-
-    odbc_query(conn, 
-                "SELECT (id_usuario) FROM tb_usuario WHERE usuario='~w' AND senha='~w'"-[Usuario, Senha],
-                row(Result)).
+get_user(Usuario, Senha, Results) :-
+     odbc_query(conn, 
+                 "SELECT id_usuario, nome, profissao FROM tb_usuario WHERE usuario='~w' AND senha='~w'"-[Usuario, Senha],
+                 Results,
+                 [types([integer, default, default])]).
 
 cadastra_usuario(Nome, Cpf, Matricula, Profissao, Usuario, Senha, F) :-
     odbc_query('conn',
@@ -58,16 +59,22 @@ inserir_tarefa(Aluno, Colaborador, Disciplina, Descricao, Envio, Relevancia, Res
                 Result).
 
 ordenar_tarefas_relevancia(Aluno, Relevancia, Result):-
-    odbc_query('conn', 
-                "SELECT * FROM tb_tarefa WHERE aluno_id = '~w' OR colaborador_id = '~w' AND relevancia = '~w'"-[Aluno, Aluno, Relevancia],
-                Result).
+    findall(Result,
+                odbc_query(conn,
+                           "SELECT * FROM tb_tarefa WHERE aluno_id='~w' OR colaborador_id='~w' AND relevancia='~w'"-[Id, Id, Op],
+                           Result, [types([integer, default, default, default, default, default, default])]),
+            Results).
 
 ordenar_tarefas_asc(Aluno, Result):-
-    odbc_query('conn',
-                "SELECT * FROM tb_tarefa WHERE aluno_id = '~w' OR colaborador_id = '~w' ORDER BY relevancia ASC"-[Aluno, Aluno],
-                Result).
+    findall(Result,
+                odbc_query(conn,
+                          "SELECT * FROM tb_tarefa WHERE aluno_id='~w' OR colaborador_id='~w' ORDER BY relevancia ASC"-[Id],
+                            Result, [types([integer, default, default, default, default, default, default])]),
+            Results).
 
 ordenar_tarefas_desc(Aluno, Result):-
-    odbc_query('conn',
-                "SELECT * FROM tb_tarefa WHERE aluno_id = '~w' OR colaborador_id = '~w' ORDER BY relevancia DESC"-[Aluno, Aluno],
-                Result).
+    findall(Result,
+                odbc_query(conn,
+                          "SELECT * FROM tb_tarefa WHERE aluno_id='~w' OR colaborador_id='~w' ORDER BY relevancia DESC"-[Id],
+                            Result, [types([integer, default, default, default, default, default, default])]),
+                Results).

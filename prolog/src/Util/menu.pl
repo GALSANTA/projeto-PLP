@@ -1,35 +1,29 @@
 :- include('../Controllers/alunoController.pl').
+:- include('../Controllers/professorController.pl').
+:- include('./util.pl').
 
 menu(Usuario) :- 
+    row(Id, Nome, Profissao) = Usuario,
+    (Profissao == 'professor' -> menuProfessor("", Nome); menuAluno(Usuario)).
 
-    % Profissao é pega por algo que vem do usuario
-    Profissao = "aluno",
-
-    (Profissao == "professor" -> menuProfessor(""); menuAluno(Usuario)).
-
-menuProfessor(Message):-
+menuProfessor(Message, Nome):-
     tty_clear,
     write(Message), nl,
-    % Sera substituido por algo que vem do usuario
-    Nome = "Professor A",
-
     atom_concat("Olá professor: ", Nome, R),
     atom_concat(R, "! O que deseja?", R1),
     write(R1), nl,
     write("[1] para atualizar nota de uma aluno."), nl,
     write("[2] para deslogar"), nl,
     read(Opcao),
-    (Opcao == 1 -> update_nota(1,1,1), menuProfessor("Nota atualizada com sucesso!"); Opcao == 2 -> menuPrincipal("Professor foi deslogado")).
+    (Opcao == 1 -> atualiza_nota, menuProfessor("Nota atualizada com sucesso!", Nome); Opcao == 2 -> menuPrincipal("Professor foi deslogado")).
 
 
 menuAluno(Usuario):-
     tty_clear,
-
-    % O nome do aluno é pego por algo que vem do usuario
-    Aluno = "Aluno A",
-    atom_concat("Olá aluno: ", Aluno, R),
+    row(Id, Nome, Profissao) = Usuario,
+    write(Profissao),
+    atom_concat("Olá aluno: ", Nome, R),
     atom_concat(R, "! O que deseja?", R1),
-
     write(R1), nl,
     write("[1] para cadastrar as cadeiras."), nl, 
     write("[2] para cadastrar tarefas."), nl,
@@ -70,21 +64,27 @@ menuAlunoCadastrarTarefas(Usuario):-
 
 menuVisualizarTarefas(Usuario) :- 
     
-    % IdAluno = pega do usuario o id do aluno.
-    % let id_aluno = Util.convert(Util.getId(Util.matrizToList matriz))
-
+    row(Id, Nome, Profissao) = Usuario,
+   
     write("\nInforme como deseja visualizar as Tarefas"), nl,
     write("1-Alta relevancia 2-Média relevancia 3-Baixa relevancia 4-Crescente 5-Decrescente"), nl,
     read(Opcao),
-    (Opcao = 1 -> write("1"); 
-    Opcao = 2 -> write("2");
-    Opcao = 3 -> write("3");
-    % Ordernar Por relevancia
-    Opcao == 4 -> 
-    write("4")
-    % Ordernar Crescente
+    (Opcao = 1 -> 
+        ordernarTarefasRelevancia(Id, Opcao, Results),
+        iterarTarefas(Results)
+    ; 
+    Opcao = 2 -> 
+        ordernarTarefasRelevancia(Id, Opcao, Results),
+        iterarTarefas(Results)
     ;
-    Opcao == 5 -> 
-    write("5")
-    % Ordernar Decrescente
+    Opcao = 3 -> 
+       ordernarTarefasRelevancia(Id, Opcao, Results),
+       iterarTarefas(Results)
+    ;
+    Opcao == 4 -> 
+        ordernarTarefasASC(Id,  Results),
+        iterarTarefas(Results)
+    ;
+    ordernarTarefasDESC(Id, Results),
+    iterarTarefas(Results)
     ).
