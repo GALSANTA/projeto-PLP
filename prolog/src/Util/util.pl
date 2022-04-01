@@ -1,8 +1,11 @@
-loopTarefa(0) :-  write("digite . para continuar..."), nl, read(Buffer).
+loopTarefa(0, Lista).
 loopTarefa(N, Lista) :-
 [H | T] = Lista,
-row(Id, IdAluno, IdColaborador, IdDisciplina, Descricao, Envio, Relevancia) = H,
-write("Tarefa: "), write(Descricao), write(" -- "), write(Envio), write(" Relevância: "), write(Relevancia), nl,
+row(Id, IdAluno, Descricao, IdColaborador, IdDisciplina, Relevancia) = H,
+write("Tarefa: "), write(Descricao),
+write(" Disciplina"), write(IdDisciplina),
+write(" Relevância: "), write(Relevancia),
+nl,
 M is N-1,
 loopTarefa(M, T).
 
@@ -10,7 +13,7 @@ iterarTarefas(Lista) :-
 length(Lista, C),
 loopTarefa(C, Lista).
 
-loopCadastrar(0).
+loopCadastrar(0, Lista).
 loopCadastrar(N, Lista) :-
 [H | T] = Lista,
 row(Id, Descricao, Professor) = H,

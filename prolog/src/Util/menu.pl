@@ -43,8 +43,6 @@ menuAlunoCadastrar(Usuario):-
     write("Essas são as disciplinas que recomendamos para você!"), nl,
     cadeiras(Periodo, Quantidade, Results),
     iterarCadastro(Results),
-    write("digite . para continuar..."), nl,
-    read(buffer),
     menuInserir("", Usuario).
 
 menuAlunoCadastrarTarefas(Usuario):-
@@ -71,24 +69,33 @@ menuVisualizarTarefas(Usuario) :-
     read(Opcao),
     (Opcao = 1 -> 
         ordenar_tarefas_relevancia(Id, Opcao, Results),
-        write(Results),
-        iterarTarefas(Results)
+        iterarTarefas(Results),
+        write("digite E. para continuar..."), nl,
+        read(buffer),
+        menuAluno(Usuario)
     ; 
     Opcao = 2 -> 
         ordenar_tarefas_relevancia(Id, Opcao, Results),
-        iterarTarefas(Results)
+        iterarTarefas(Results),
+        write("digite E. para continuar..."), nl,
+        read(buffer),
+        menuAluno(Usuario)
     ;
     Opcao = 3 -> 
        ordenar_tarefas_relevancia(Id, Opcao, Results),
-       iterarTarefas(Results)
+       iterarTarefas(Results),
+       write("digite E. para continuar..."), nl,
+        read(buffer)
     ;
     Opcao == 4 -> 
         ordenar_tarefas_asc(Id,  Results),
-        iterarTarefas(Results)
+        iterarTarefas(Results),
+        write("digite E. para continuar..."), nl,
+        read(buffer)
     ;
     ordenar_tarefas_desc(Id, Results),
     iterarTarefas(Results)
-    ), write("AAA"), menuAluno(Usuario).
+    ), menuAluno(Usuario).
 
 menuInserir(Mensagem, Usuario):-
     write(Mensagem), nl, 
@@ -100,5 +107,5 @@ menuInserir(Mensagem, Usuario):-
         read(IdDisciplina),
         row(Id, Nome, Profissao) = Usuario,
         inserir_disciplina(Id, IdDisciplina),
-        menuInserir("Disciplina inserida com sucesso!")
+        menuInserir("Disciplina inserida com sucesso!", Usuario)
     ; menuAluno(Usuario)).

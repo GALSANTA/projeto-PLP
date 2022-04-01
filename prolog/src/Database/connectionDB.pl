@@ -50,13 +50,13 @@ verify_aluno(Aluno):-
 cadeiras(Periodo, Quantidade, Results):-
     findall(Result,
                 odbc_query(conn,
-                    "SELECT id_disciplina, nome_disciplina, nome FROM tb_disciplina AS A INNER JOIN tb_usuario AS B ON B.id_usuario = A.professor_id WHERE (A.tipo=2 OR A.tipo='O') ORDER BY id_disciplina LIMIT 3",
+                    "SELECT id_disciplina, nome_disciplina, nome FROM tb_disciplina AS A INNER JOIN tb_usuario AS B ON B.id_usuario = A.professor_id WHERE (A.tipo='~w' OR A.tipo='O') ORDER BY id_disciplina LIMIT ~w"-[Periodo, Quantidade],
                     Result, [types([integer, default, default])]),
                 Results).
 
 inserir_disciplina(IdAluno, IdDisciplina) :-
     odbc_query('conn',
-                "INSERT INTO tb_aluno_disciplina VALUES ('~w','~w',0)"-[IdAluno, IdDisciplina],
+                "INSERT INTO tb_aluno_disciplina (aluno_id, disciplina_id, nota) VALUES ('~w','~w',0)"-[IdAluno, IdDisciplina],
                 Result).
 
 inserir_tarefa(Id, Descricao, Colaborador, Disciplina, Relevancia, Result):-
@@ -68,19 +68,19 @@ ordenar_tarefas_relevancia(Id, Op, Results):-
     findall(Result,
                 odbc_query(conn,
                            "SELECT * FROM tb_tarefa WHERE aluno_id='~w' OR colaborador_id='~w' AND relevancia='~w'"-[Id, Id, Op],
-                           Result, [types([integer, default, default, default, default])]),
+                           Result, [types([integer, default, default, default, default, default])]),
             Results).
 
 ordenar_tarefas_asc(Id, Results):-
     findall(Result,
                 odbc_query(conn,
-                          "SELECT * FROM tb_tarefa WHERE aluno_id='~w' OR colaborador_id='~w' ORDER BY relevancia ASC"-[Id],
-                            Result, [types([integer, default, default, default, default])]),
+                          "SELECT * FROM tb_tarefa WHERE aluno_id='~w' OR colaborador_id='~w' ORDER BY relevancia ASC"-[Id, Id],
+                            Result, [types([integer, default, default, default, default, default])]),
             Results).
 
 ordenar_tarefas_desc(Id, Results):-
     findall(Result,
                 odbc_query(conn,
-                          "SELECT * FROM tb_tarefa WHERE aluno_id='~w' OR colaborador_id='~w' ORDER BY relevancia DESC"-[Id],
-                            Result, [types([integer, default, default, default, default])]),
+                          "SELECT * FROM tb_tarefa WHERE aluno_id='~w' OR colaborador_id='~w' ORDER BY relevancia DESC"-[Id, Id],
+                            Result, [types([integer, default, default, default, default, default])]),
                 Results).
