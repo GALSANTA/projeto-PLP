@@ -17,7 +17,6 @@ menuProfessor(Message, Nome):-
     read(Opcao),
     (Opcao == 1 -> atualiza_nota, menuProfessor("Nota atualizada com sucesso!", Nome); Opcao == 2 -> menuPrincipal("Professor foi deslogado")).
 
-
 menuAluno(Usuario):-
     tty_clear,
     row(Id, Nome, Profissao) = Usuario,
@@ -36,55 +35,70 @@ menuAluno(Usuario):-
     Opcao == 4 -> menuPrincipal("Aluno foi deslogado!")).
 
 menuAlunoCadastrar(Usuario):-
+
     write("Qual o período de referência?"), nl,
     read(Periodo), 
     write("Qual o numero de cadeiras que deseja cursar?"), nl,
     read(Quantidade),
     write("Essas são as disciplinas que recomendamos para você!"), nl,
-    cadeiras(Periodo, Quantidade),
-    menu(Usuario).
+    cadeiras(Periodo, Quantidade, Results),
+    iterarCadastro(Results),
+    write("digite . para continuar..."), nl,
+    read(buffer),
+    menuInserir("", Usuario).
 
 menuAlunoCadastrarTarefas(Usuario):-
+    row(Id, Nome, Profissao) = Usuario,
+
     write("Id do colaborador."), nl,
     read(Colaborador),
     write("Id do disciplina."), nl,
     read(Disciplina),
     write("Descreva a tarefa que deve ser executada."), nl,
     read(Descricao),
-    write("Informe a data e Hora do envio. YYYY-MM-DD"), nl,
-    read(Data),
-    write("Qual a relevancia?"), nl,
     write("Qual a relevancia? 1-Alta 2-Média 3-Baixa"), nl,
     read(Relevancia),
-    % inserir tarefa
+    inserir_tarefa(Id, Descricao, Colaborador, Disciplina, Relevancia, Result),
     write("Tarefa inserida com sucesso!..."), nl,
-    write("digite . para continuar..."), nl,
+    write("digite E. para continuar..."), nl,
     read(buffer),
     menuAluno(Usuario).
 
 menuVisualizarTarefas(Usuario) :- 
-    
     row(Id, Nome, Profissao) = Usuario,
-   
     write("\nInforme como deseja visualizar as Tarefas"), nl,
     write("1-Alta relevancia 2-Média relevancia 3-Baixa relevancia 4-Crescente 5-Decrescente"), nl,
     read(Opcao),
     (Opcao = 1 -> 
-        ordernarTarefasRelevancia(Id, Opcao, Results),
+        ordenar_tarefas_relevancia(Id, Opcao, Results),
+        write(Results),
         iterarTarefas(Results)
     ; 
     Opcao = 2 -> 
-        ordernarTarefasRelevancia(Id, Opcao, Results),
+        ordenar_tarefas_relevancia(Id, Opcao, Results),
         iterarTarefas(Results)
     ;
     Opcao = 3 -> 
-       ordernarTarefasRelevancia(Id, Opcao, Results),
+       ordenar_tarefas_relevancia(Id, Opcao, Results),
        iterarTarefas(Results)
     ;
     Opcao == 4 -> 
-        ordernarTarefasASC(Id,  Results),
+        ordenar_tarefas_asc(Id,  Results),
         iterarTarefas(Results)
     ;
-    ordernarTarefasDESC(Id, Results),
+    ordenar_tarefas_desc(Id, Results),
     iterarTarefas(Results)
-    ).
+    ), write("AAA"), menuAluno(Usuario).
+
+menuInserir(Mensagem, Usuario):-
+    write(Mensagem), nl, 
+    write("[1] inserir materia!"), nl,
+    write("[2] Voltar"), nl,  
+    read(Opcao),
+    (Opcao == 1 ->
+        write("Digite o ID da disciplina!"),
+        read(IdDisciplina),
+        row(Id, Nome, Profissao) = Usuario,
+        inserir_disciplina(Id, IdDisciplina),
+        menuInserir("Disciplina inserida com sucesso!")
+    ; menuAluno(Usuario)).
