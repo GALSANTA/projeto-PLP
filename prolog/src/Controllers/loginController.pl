@@ -22,6 +22,9 @@ signUp :-
     read(Usuario),
     write('Digite sua Senha: '), nl,
     read(Senha),
-    (validate_registry(Cpf, Matricula, Usuario, Result) -> write('Usuario já possui uma conta no sistema!'),nl, halt;
-    cadastra_usuario(Nome, Cpf, Matricula, Profissao, Usuario, Senha, F) -> write('Cadastro Realizado!'), nl, halt;
-    write('Não foi possivel realizar o cadastro'), nl, halt).
+    (validate_registry(Cpf, Matricula, Usuario, Result) -> write('Usuario já possui uma conta no sistema!'),nl,write("digite E. para continuar..."), nl,
+    read(buffer), menu(Result);
+    cadastra_usuario(Nome, Cpf, Matricula, Profissao, Usuario, Senha, F) -> write('Cadastro Realizado!'), nl, write("digite E. para continuar..."), nl,
+    read(buffer), get_user(Usuario, Senha, R), menu(R);
+    write('Não foi possivel realizar o cadastro'), nl, write("digite E. para continuar..."), nl,
+    read(buffer), menu(Result)).

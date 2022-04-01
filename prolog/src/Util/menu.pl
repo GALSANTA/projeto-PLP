@@ -22,7 +22,7 @@ menuProfessor(Message, Nome):-
         read(Id_a),
         write('Nota do aluno: '), nl,
         read(Nota),
-        (verify_disciplina_aluno(Id_d, Id_a, Result) -> update_nota(Id_d, Id_a, Nota), menuProfessor("Aluno cadastrado com sucesso!", Nome);
+        (verify_disciplina_aluno(Id_d, Id_a, Result) -> update_nota(Id_d, Id_a, Nota), menuProfessor("Nota atualizada com sucesso!", Nome);
         \+ verify_disciplina(Id_d) -> menuProfessor("Disciplina não existe!", Nome);
         \+ verify_aluno(Id_a) -> menuProfessor("Aluno não existe!", Nome);
         menuProfessor("Aluno não cadastrado na disciplina informada", Nome), nl, halt)
@@ -31,7 +31,6 @@ menuProfessor(Message, Nome):-
 menuAluno(Usuario):-
     tty_clear,
     row(Id, Nome, Profissao) = Usuario,
-    write(Profissao),
     atom_concat("Olá aluno: ", Nome, R),
     atom_concat(R, "! O que deseja?", R1),
     write(R1), nl,
