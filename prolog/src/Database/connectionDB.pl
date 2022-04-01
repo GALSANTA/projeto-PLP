@@ -13,7 +13,7 @@ drop_connection :-
 
 getUser(Usuario, Senha, Result) :-
     odbc_query(conn, 
-                "SELECT (nome) FROM tb_usuario WHERE usuario='~w' AND senha='~w'"-[Usuario, Senha],
+                "SELECT (id_usuario) FROM tb_usuario WHERE usuario='~w' AND senha='~w'"-[Usuario, Senha],
                 row(Result)).
 
 cadastra_usuario(Nome, Cpf, Matricula, Profissao, Usuario, Senha, F) :-
